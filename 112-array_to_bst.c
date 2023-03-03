@@ -1,50 +1,34 @@
 #include "binary_trees.h"
 
 /**
- * bst_insert - Inserts a value in a Binary Search Tree
- * @tree: double pointer to the root node of the BST to insert the value
- * @value: Value to store in the node to be inserted
- * Return: pointer to the created node, or NULL on failure
- * if tree is NULL, the created node must become the root node.
- * If the value is already present in the tree is ignored
+ * array_to_bst - Builds a Binary Search Tree from an array.
+ *
+ * @array: A pointer to the first element of the array to be converted.
+ * @size: The number of element in the array
+ *
+ * Return: A pointer to the root node of the created BST, or NULL on failure.
  */
-bst_t *bst_insert(bst_t **tree, int value)
+bst_t *array_to_bst(int *array, size_t size)
 {
-	bst_t *aux = NULL;
+	bst_t *tree = NULL;
+	size_t index, jndex;
 
-	if (tree == NULL)
+	if (array == NULL)
 		return (NULL);
 
-	if (*tree == NULL)
+	for (index = 0; index < size; index++)
 	{
-		*tree = binary_tree_node(NULL, value);
-		return (*tree);
+		for (jndex = 0; jndex < index; jndex++)
+		{
+			if (array[jndex] == array[index])
+				break;
+		}
+		if (jndex == index)
+		{
+			if (bst_insert(&tree, array[index]) == NULL)
+				return (NULL);
+		}
 	}
 
-	aux = *tree;
-	while (1)
-	{
-		if (aux->n == value)
-			return (NULL);
-		if (value > aux->n)
-		{
-			if (aux->right != NULL)
-				aux = aux->right;
-			else
-			{
-				aux->right = binary_tree_node(aux, value);
-				return (aux->right);
-			}
-		}
-		else
-		{
-			if (aux->left != NULL)
-				aux = aux->left;
-			else
-			{
-				aux->left = binary_tree_node(aux, value);
-				return (aux->left);
-			}
-		}
-	}
+	return (tree);
 }
